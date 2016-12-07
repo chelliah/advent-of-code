@@ -4,16 +4,12 @@
 
 (def data (slurp (io/resource "day2.txt")))
 
-(def keyboard [[1 2 3] [4 5 6] [7 8 9]])
+(def keyboard-1 [[1 2 3] [4 5 6] [7 8 9]])
 
 (def keyboard-2 [[nil nil 1 nil nil] [nil 2 3 4 nil] [5 6 7 8 9] [nil "A" "B" "C" nil] [nil nil "D" nil nil]])
 
 ;finger position is tracked based on distance from the '5' key
-;part 1
-; (def finger-position (atom {:horizontal-displacement 1 :vertical-displacement 1}))
-
-;part 2
-(def finger-position (atom {:horizontal-displacement 0 :vertical-displacement 2}))
+(def finger-position (atom {:horizontal-displacement 1 :vertical-displacement 1}))
 
 (defn get-number-by-finger-position [keyboard vertical-displacement horizontal-displacement]
   (nth
@@ -28,51 +24,52 @@
     "L" (swap! finger-position update-in [:horizontal-displacement] dec)
     "R" (swap! finger-position update-in [:horizontal-displacement] inc)))
 
-(defn can-move-2? [movement]
+(defn can-move? [movement keyboard]
   (case movement
     "U" (not (nil?
               (get-number-by-finger-position
-               keyboard-2
+               keyboard
                (dec (get @finger-position :vertical-displacement))
                (get @finger-position :horizontal-displacement))))
      "D" (not (nil?
                (get-number-by-finger-position
-                keyboard-2
+                keyboard
                 (inc (get @finger-position :vertical-displacement))
                 (get @finger-position :horizontal-displacement))))
       "L" (not (nil?
                 (get-number-by-finger-position
-                 keyboard-2
+                 keyboard
                  (get @finger-position :vertical-displacement)
                  (dec (get @finger-position :horizontal-displacement)))))
        "R" (not (nil?
                  (get-number-by-finger-position
-                  keyboard-2
+                  keyboard
                   (get @finger-position :vertical-displacement)
                   (inc (get @finger-position :horizontal-displacement)))))))
 
+; (defn can-move? [movement]
+;   (case movement
+;     "U" (> (:vertical-displacement @finger-position) 0)
+;     "D" (< (:vertical-displacement @finger-position) 2)
+;     "L" (> (:horizontal-displacement @finger-position) 0)
+;     "R" (< (:horizontal-displacement @finger-position) 2)))
 
-(defn can-move? [movement]
-  (case movement
-    "U" (> (:vertical-displacement @finger-position) 0)
-    "D" (< (:vertical-displacement @finger-position) 2)
-    "L" (> (:horizontal-displacement @finger-position) 0)
-    "R" (< (:horizontal-displacement @finger-position) 2)))
-
-(defn get-digit [sequence]
+(defn get-digit [sequence keyboard]
   (let [single-digit-sequence     (string/split sequence #"")]
     (doseq [movement single-digit-sequence]
-      ; (if (can-move? movement)
-      ;   (move movement)))
-      (if (can-move-2? movement)
+      (if (can-move? movement keyboard)
          (move movement)))
     (get-number-by-finger-position
-      keyboard-2
+      keyboard
       (get @finger-position :vertical-displacement)
       (get @finger-position :horizontal-displacement))))
 
 
 (defn run []
+  (println "_________________DAY 2: BATHROOM SECURITY_________________")
   (let [sequences    (string/split-lines data)
-        keycode      (map get-digit sequences)]
-    (println keycode)))
+        keycode-1    (map #(get-digit % keyboard-1) sequences)
+        _            (reset! finger-position {:horizontal-displacement 0 :vertical-displacement 2})
+        keycode-2    (map #(get-digit % keyboard-2) sequences)]
+    (println "Code for keypad 1: " keycode-1)
+    (println "Code for keypad 2: "keycode-2)))
