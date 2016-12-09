@@ -44,5 +44,6 @@
       (println "Number of lieangles (reformatted): " (get triangles false))))
 
 (defn run []
-    (part-1)
-    (part-2))
+  (println "_________________DAY 3: SQUARES WITH THREE SIDES_________________")
+  (part-1)
+  (part-2))
