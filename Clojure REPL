@@ -42,5 +42,193 @@ user=>
 #'user/reduce-csv-row
 (reduce-csv-row "abcd" 4)
 IllegalArgumentException Don't know how to create ISeq from: java.lang.Long  clojure.lang.RT.seqFrom (RT.java:542)
---------------------
 (reduce nth ["a" "b"] ["c" "d"])
+ClassCastException java.lang.String cannot be cast to java.lang.Number  clojure.core/nth (core.clj:870)
+(reduce concat
+        ["a" "b"] ["c" "d"])
+user=>
+("a" "b" \c \d)
+(+ 2 2)
+user=>
+4
+(range 7)
+user=>
+(0 1 2 3 4 5 6)
+(subs "Clojure" 1)
+user=>
+"lojure"
+(subs "Clojure" 1 18)
+StringIndexOutOfBoundsException String index out of range: 18  java.lang.String.substring (String.java:1963)
+(defn find-abba [char-sequence]
+  (for [x (range 0 (count char-sequence))]
+    (and
+      (= (nth char-sequence x) (nth char-sequence (+ x 3)))
+      (= (nth char-sequence (+ x 1)) (nth char-sequence (+ x 2)))
+      (not= (nth char-sequence x) (nth char-sequence (+ x 1)))))) 
+user=>
+#'user/find-abba
+(find-abba "abba")
+StringIndexOutOfBoundsException String index out of range: 4  java.lang.String.charAt (String.java:658)
+(defn find-abba [char-sequence]
+  (for [x (range 0 (count char-sequence))]
+    (and
+      (= (nth char-sequence x) (nth char-sequence (+ x 3 nil)))
+      (= (nth char-sequence (+ x 1 nil)) (nth char-sequence (+ x 2 nil)))
+      (not= (nth char-sequence x nil) (nth char-sequence (+ x 1 nil))))))
+user=>
+#'user/find-abba
+(find-abba "abba")
+NullPointerException   clojure.lang.Numbers.ops (Numbers.java:1013)
+(defn find-abba [char-sequence]
+  (let [substring     (take 4 char-sequence)]
+    (println substring)))
+user=>
+#'user/find-abba
+(find-abba "laksjdflkajsfd")
+(l a k s)
+user=>
+nil
+(defn find-abba [char-sequence]
+  (let [substring     (take 4 char-sequence)]
+    (println substring)
+    (println (= substring (reverse substring)))))
+user=>
+#'user/find-abba
+(find-abba "asdflkajdflkjsa")
+(a s d f)
+false
+user=>
+nil
+(find-abba "abbaalsjdflkjsda")
+(a b b a)
+true
+user=>
+nil
+(defn find-abba [char-sequence]
+  (let [substring     (take 4 char-sequence)]
+    (println (not= (nth substring 0) (nth substring 1)))
+    (if (and
+         (= substring (reverse substring))
+         (not= (nth substring 0) (nth substring 1))))))
+CompilerException java.lang.RuntimeException: Too few arguments to if, compiling:(/private/var/folders/68/mk716f6j63l50hn32c6zp8n40000gn/T/form-init6129278524893520447.clj:4:5) 
+(defn find-abba [char-sequence]
+  (let [substring     (take 4 char-sequence)]
+    (println (not= (nth substring 0) (nth substring 1)))
+    (if (and
+         (= substring (reverse substring))
+         (not= (nth substring 0) (nth substring 1)))
+      true
+      (recur (rest char-sequence)))))
+user=>
+#'user/find-abba
+(find-abba "abbalkajslkdfjd")
+true
+user=>
+true
+(find-abba "akdjsflkasjdflkajdfabba")
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+user=>
+true
+(find-abba "alkdjflksjdfaaaaalksdjflkasdjf")
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+false
+false
+false
+false
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+IndexOutOfBoundsException   clojure.lang.RT.nthFrom (RT.java:885)
+(> 3 2)
+user=>
+true
+(count (1 2 2))
+ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn  user/eval3010 (form-init6129278524893520447.clj:1)
+(count '(1 2 2))
+user=>
+3
+(defn find-abba [char-sequence]
+  (let [substring     (take 4 char-sequence)]
+    (if (> 4 (count substring))
+      false
+      (if (and
+           (= substring (reverse substring))
+           (not= (nth substring 0) (nth substring 1)))
+        true
+        (recur (rest char-sequence))))))
+user=>
+#'user/find-abba
+(find-abba "alksdjflkdsjfabba")
+user=>
+true
+(find-abba "alksdjflkdsjfabca")
+user=>
+false
+(find-abba "alksdjflkdsjfaaaa")
+user=>
+false
+(find-abba "aslkdfjlksdfabbalksdjflksdfj")
+user=>
+true
+(find-abba "aslkdfjlksdfabalksdjflksdfj")
+user=>
+false
+(find-abba "aslkdfjlksdfaaaalksdjflksdfj")
+user=>
+false
+(str/split "q1w2e3r4t5y6u7i8o9p0" #"\d+" 5)
+CompilerException java.lang.RuntimeException: No such namespace: str, compiling:(/private/var/folders/68/mk716f6j63l50hn32c6zp8n40000gn/T/form-init6129278524893520447.clj:1:5) 
+(clojure.string/split "q1w2e3r4t5y6u7i8o9p0" #"\d+" 5)
+user=>
+["q" "w" "e" "r" "t5y6u7i8o9p0"]
+(clojure.string/split "aaslkdfjaldsf[alksdjf]askljdf" #"\d+" 5)
+user=>
+["aaslkdfjaldsf[alksdjf]askljdf"]
+(clojure.string/split "aaslkdfjaldsf[alksdjf]askljdf" #"\[")
+user=>
+["aaslkdfjaldsf" "alksdjf]askljdf"]
+(clojure.string/split "aaslkdfjaldsf[alksdjf]askljdf" #"\[ | \]")
+user=>
+["aaslkdfjaldsf[alksdjf]askljdf"]
+--------------------
+(clojure.string/split "aaslkdfjaldsf[alksdjf]askljdf" #"(\[)|(\])")

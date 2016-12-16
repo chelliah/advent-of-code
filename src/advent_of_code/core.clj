@@ -5,7 +5,10 @@
             [advent-of-code.exercises.day-3 :as three]
             [advent-of-code.exercises.day-4 :as four]
             [advent-of-code.exercises.day-5 :as five]
-            [advent-of-code.exercises.day-6 :as six]))
+            [advent-of-code.exercises.day-6 :as six]
+            [advent-of-code.exercises.day-7 :as seven]))
+
+
 (defn -main
   [& args]
-  (six/run))
+  (seven/run))
